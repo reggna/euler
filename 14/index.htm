@@ -1,0 +1,62 @@
+<script>
+
+(function() {
+  var start = new Date();
+  var list = [];
+  function getNextNumber(i) {
+    if (i % 2 === 0) return i/2;
+    return (3*i)+1
+  }
+  function generateSequenceLength(start) {
+    if (start === 1) return 1;
+    if (list[start] !== undefined) return list[start];
+    var num = 1+generateSequenceLength(getNextNumber(start));
+    list[start] = num;
+    return num;
+  }
+  var max = 0;
+  var start_number = 0;
+  for (var i = 1; i < 1000000; i++) {
+    var num = generateSequenceLength(i);
+    if (num > max) {
+      max = num;
+      start_number = i;
+    }
+  }
+  var end = new Date();
+  console.log("Starting with " + start_number + " will generate a sequence of "
+      + max + " numbers.");
+  console.log("Recursive took " +
+      (end.valueOf() - start.valueOf()) + "ms to complete.");
+})();
+
+(function() {
+  var start = new Date();
+  var list = [];
+  list[1] = 1;
+  var max = 0;
+  var start_number = 0;
+  for (var i = 1; i < 1000000; i++) {
+    var n = i;
+    var sequence = [];
+    while (list[n] === undefined)  {
+      sequence.push(n);
+      if (n % 2 === 0) n/=2;
+      else n = (3*n)+1;
+    }
+    for (var s in sequence) {
+      list[sequence[s]] = list[n] + sequence.length - s;
+    }
+    if (list[i] > max) {
+      max = list[i];
+      start_number = i;
+    }
+  }
+  var end = new Date();
+  console.log("Starting with " + start_number + " will generate a sequence of "
+      + max + " numbers.");
+  console.log("Iterative took " +
+      (end.valueOf() - start.valueOf()) + "ms to complete.");
+})();
+
+</script>
